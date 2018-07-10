@@ -1,0 +1,76 @@
+group 'com.louis'
+version '1.0-SNAPSHOT'
+
+buildscript {
+
+    ext {
+        springVersion = '2.0.3.RELEASE'
+        thriftVersion = '0.11.0'
+        curatorVersion = '4.0.1'
+        zkVersion = '3.4.12'
+    }
+
+    repositories {
+        maven { url 'https://repo.spring.io/libs-milestone' }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springVersion}"
+    }
+}
+
+subprojects {
+
+    repositories {
+        maven { url 'https://repo.spring.io/libs-milestone' }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    sourceCompatibility = 1.8
+
+    version = '1.0.M1'
+
+    configurations {
+        all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        compile.exclude module: 'spring-boot-starter-tomcat'
+    }
+
+    jar {
+        enabled = true
+    }
+
+    dependencies {
+        compile ("org.apache.thrift:libthrift:${thriftVersion}") {
+            exclude group: 'org.slf4j', module: 'slf4j-api'
+        }
+        compile ("org.apache.curator:curator-recipes:${curatorVersion}") {
+            exclude group: 'org.apache.zookeeper', module : 'zookeeper'
+            exclude group: 'org.slf4j', module: 'slf4j-api'
+        }
+
+        compile ("org.apache.zookeeper:zookeeper:${zkVersion}") {
+            exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+            exclude group: 'log4j', module: 'log4j'
+            exclude group: 'com.google.guava', module: 'guava'
+            exclude group: 'org.slf4j', module: 'slf4j-api'
+        }
+
+        compile group: "org.apache.commons", name: "commons-lang3", version: "3.7"
+        compile "org.springframework.boot:spring-boot-starter-log4j2"
+        compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter'
+        compile "com.fasterxml.jackson.core:jackson-databind"
+        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+        compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+    }
+}

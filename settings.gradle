@@ -1,0 +1,5 @@
+rootProject.name = 'ThriftForSpringBoot'
+include 'thrift.server'
+include 'thrift.client'
+include 'thrift.common'
+

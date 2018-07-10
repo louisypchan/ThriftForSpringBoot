@@ -1,0 +1,4 @@
+dependencies {
+    compile project(":thrift.common")
+    compile group: "org.apache.commons", name: "commons-pool2", version: "2.6.0"
+}
